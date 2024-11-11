@@ -6,6 +6,8 @@ import { appwriteConfig } from "@/lib/appwrite/config";
 import { ID, Query } from "node-appwrite";
 import { parseStringify } from "../utils";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { parse } from "path";
 
 async function getUserByEmail(email: string) {
   const { databases } = await createAdminClient();
@@ -108,5 +110,33 @@ export async function getCurrentUser() {
     return parseStringify(user.documents[0]);
   } catch (error) {
     console.log(error);
+  }
+}
+
+export async function signOutUser() {
+  const { account } = await createSessionClient();
+  try {
+    await account.deleteSession("current");
+    (await cookies()).delete("appwrite-session");
+  } catch (error) {
+    handleError(error, "Failed to sign out user");
+  } finally {
+    redirect("/sign-in");
+  }
+}
+
+export async function signInUser({ email }: { email: string }) {
+  try {
+    const existingUser = await getUserByEmail(email);
+
+    // If user exists, send OTP
+    if (existingUser) {
+      await sendEmailOTP({ email });
+      return parseStringify({ accountId: existingUser.accountId });
+    }
+
+    return parseStringify({ accountId: null, error: "User not found" });
+  } catch (error) {
+    handleError(error, "Failed to sign in user");
   }
 }

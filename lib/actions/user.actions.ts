@@ -4,10 +4,9 @@ import { avatarPlaceholderUrl } from "@/contants";
 import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { ID, Query } from "node-appwrite";
-import { parseStringify } from "../utils";
+import { parseStringify, handleError } from "../utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { parse } from "path";
 
 async function getUserByEmail(email: string) {
   const { databases } = await createAdminClient();
@@ -18,11 +17,6 @@ async function getUserByEmail(email: string) {
     [Query.equal("email", [email])]
   );
   return result.total > 0 ? result.documents[0] : null;
-}
-
-function handleError(error: unknown, message: string) {
-  console.log(error, message);
-  throw error;
 }
 
 export async function sendEmailOTP({ email }: { email: string }) {

@@ -184,6 +184,7 @@ export function constructDownloadUrl(bucketFileId: string) {
   return `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_BUCKET}/files/${bucketFileId}/download?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT}`;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getUsageSummary(totalSpace: any) {
   return [
     {
@@ -233,4 +234,9 @@ export function getFileTypesParams(type: string) {
     default:
       return ["document"];
   }
+}
+
+export function handleError(error: unknown, message: string) {
+  console.log(error, message);
+  throw error;
 }

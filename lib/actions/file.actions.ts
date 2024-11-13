@@ -168,3 +168,28 @@ export async function updateFileUsers({
     handleError(error, "Failed to update users to share file with");
   }
 }
+
+export async function deleteFile({
+  fileId,
+  bucketFileId,
+  path,
+}: DeleteFileProps) {
+  const { databases, storage } = await createAdminClient();
+
+  try {
+    const deletedFile = await databases.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      fileId
+    );
+
+    if (deletedFile) {
+      await storage.deleteFile(appwriteConfig.bucketId, bucketFileId);
+    }
+
+    revalidatePath(path);
+    return parseStringify({ status: "success" });
+  } catch (error) {
+    handleError(error, "Failed to update users to share file with");
+  }
+}

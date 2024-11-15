@@ -1,6 +1,8 @@
 # Store It
 A NextJS 15 Google Drive Clone.
 
+![Google Drive Clone](docs/screenshot-01.png)
+
 ## Getting Started
 
 First, run the development server:

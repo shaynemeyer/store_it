@@ -13,7 +13,7 @@ interface ThumbnailProps {
 function Thumbnail({
   type,
   extension,
-  url,
+  url = "",
   imageClassName,
   className,
 }: ThumbnailProps) {

@@ -131,6 +131,15 @@ function ActionDropdown({ file }: { file: Models.Document }) {
             </Button>
             <Button onClick={handleAction} className="modal-submit-button">
               <p className="capitalize">{value}</p>
+              {isLoading && (
+                <Image
+                  src="/assets/icons/loader.svg"
+                  alt="loader"
+                  width={24}
+                  height={24}
+                  className="animate-spin"
+                />
+              )}
             </Button>
           </DialogFooter>
         )}
